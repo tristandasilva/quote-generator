@@ -20,25 +20,28 @@ function removeLoadingSpinner() {
 // Retrieving Quote From API
 async function getQuote() {
     showLoadingSpinner();
-    const proxyUrl = 'https://guarded-beach-38805.herokuapp.com/';
-    const apiUrl = 'http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json';
+    const apiKey = 'fvZyELNZcvbZv6KMV1dDOQ==avTGS55qghhnIWhr';
+    const apiURL = 'https://api.api-ninjas.com/v1/quotes';
     try {
-        const response = await fetch(proxyUrl + apiUrl);
-        const data = await response.json();
+        const response = await fetch(apiURL, {
+            headers: {'X-Api-Key': apiKey  }
+        })
+        const data = await response.json()
+        console.log(data)
         // Replacing Blank Author With Unknown
-        if (data.quoteAuthor === '') {
+        if (data[0].author === '') {
             authorText.innerText = '- Unknown';
         } else {
-            authorText.innerText = '- ' + data.quoteAuthor;
+            authorText.innerText = '- ' + data[0].author;
         }
 
         // Reduce Font Size On Larger Quotes
-        if (data.quoteText.length > 120) {
+        if (data[0].quote.length > 120) {
             quoteText.classList.add('long-quote');
         } else {
             quoteText.classList.remove('long-quote');
         }
-        quoteText.innerText = data.quoteText;
+        quoteText.innerText = data[0].quote;
         
         // Quote And Author Loaded
         removeLoadingSpinner();
